@@ -1,4 +1,18 @@
-﻿:alias p1y v3
+#################################################
+#
+# Pong
+# By Rory McGurty
+#
+# Use W, S and R, F to move.
+# First to five wins.
+# Font: http://www.dafont.com/04b-03.font
+#   0-25 A-Z
+#   26-51 a-z
+#   52-62 .!?-:#()*+
+#   63 whitespace
+#################################################
+
+:alias p1y v3
 :alias p2y v4
 :alias ballx v5
 :alias bally v6
