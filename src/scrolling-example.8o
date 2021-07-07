@@ -1,0 +1,94 @@
+﻿:const cx 8
+:const cy 8
+:const ry 16
+
+: road
+	0xFF
+	
+: road-lane	
+	0xF0
+	
+: car
+	0xFF 0x81 0x81 0x81 0xFF 0xA5 0xE7
+	
+: sprite-table
+	0x18 0x2C 0x46 0xFF 0x42 0x42 0x7E # house
+	0x18 0x3C 0x7E 0xFF 0x10 0x10 0x10 #tree
+
+: house
+	0x18 0x2C 0x46 0xFF 0x42 0x42 0x7E
+	
+: tree
+	0x18 0x3C 0x7E 0xFF 0x10 0x10 0x10
+	
+: sync	
+	delay := v0
+	loop
+		v0 := delay
+		if v0 != 0 then
+	again	
+;
+
+: draw-car
+	i := car
+	v0 := cx
+	v1 := cy
+	sprite v0 v1 7
+;
+
+: draw-roadside-object
+	#draw random sprite at edge of screen
+	va := random 0b00000001
+	if va == 0b00000000 then i := house
+	if va == 0b00000001 then i := tree
+
+	va := random 0b00000001
+	if va == 0b00000000 then v1 := 0
+	if va == 0b00000001 then v1 := 24
+
+	v0 := 56
+
+	sprite v0 v1 7
+;
+	
+: main	
+	# draw road lane
+	i := road-lane
+	v0 := 4
+	v1 := 15	
+	loop
+		sprite v0 v1 1
+		v0 += 8
+		if v0 < 64 then
+	again	
+	
+	draw-car
+	loop
+		draw-car
+		scroll-left		
+		draw-car
+		v0 := 5
+		sync
+		
+		draw-car
+		scroll-left
+		draw-car
+		v0 := 5
+		sync
+		
+		i := road-lane
+		v0 := 60		
+		v1 := ry
+		sprite v0 v1 1
+		
+		va := random 0b00000111
+		if va == 0b00000111 then draw-roadside-object
+		
+		
+	again
+	
+	
+	
+	
+	
+	
