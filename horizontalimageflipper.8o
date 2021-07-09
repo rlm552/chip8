@@ -1,0 +1,121 @@
+﻿###############################
+#
+# A subroutine to flip bits in a
+# memory address.
+# Useful when flipping an image 
+# horizontally. In this example
+# number 4 is flipped.
+#
+# Assumes load and store 
+# operations leave i unchanged.
+#
+################################
+
+
+:alias flipped v1
+:alias original v2
+
+:monitor flipped 1
+:monitor original 1
+
+: image
+	0x88 0x88 0x88 0xF8 0x08 0x08 0x08 	
+
+
+: flip-bits
+	v0 <<= v0	
+	v1 := vf
+	
+	v0 <<= v0	
+	v3 := vf
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+	v0 <<= v0
+	v3 := vf
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v3 <<= v3
+	v1 += v3
+	
+;
+
+: flip-horizontally
+	ve := 1
+	vc := 7
+	i := image
+	loop
+		load v0
+		flip-bits
+		v0 := v1
+		save v0
+		i += ve
+		vc += -1
+		if vc != 0 then
+	again
+;
+
+
+: main
+	v0 := 0b10001000
+	original := v0
+	
+	# draw original image
+	i := image
+	va := 30
+	vb := 15
+	sprite va vb 7
+	
+	
+	flip-horizontally
+	i := image
+	va += 3
+	sprite va vb 7
+	
+	loop 
+	again
+	
