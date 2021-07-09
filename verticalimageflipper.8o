@@ -1,0 +1,64 @@
+﻿###############################
+#
+# A subroutine to flip memory 
+# addresses.
+# Useful when flipping an image 
+# vertically. In this example
+# number 4 is flipped upside 
+# down. 
+#
+# Assumes load and store 
+# operations leave i unchanged.
+#
+################################
+
+:const img-length 7
+
+: image
+	0x88 0x88 0x88 0xF8 0x08 0x08 0x08 
+	
+: exchange-registers
+	v2 := v0
+	v0 := v1
+	v1 := v2
+;
+
+: flip-image
+	ve := img-length
+	ve += -1
+	vc := 0
+	#:breakpoint b0
+	loop
+		i := image
+		i += vc
+		load v0
+		v1 := v0
+		i += ve
+		load v0
+		exchange-registers
+		save v0
+		
+		i := image
+		i += vc
+		exchange-registers
+		save v0
+		
+		ve += -2
+		vc += 1
+		if ve > 1 then
+	again
+;
+
+: main
+	# draw original image
+	i := image
+	va := 30
+	vb := 15
+	sprite va vb 7
+	
+	# flip image vertically and draw	
+	flip-image
+	i := image
+	vb += 7
+	sprite va vb 7
+	
