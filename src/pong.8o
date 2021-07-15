@@ -1,18 +1,4 @@
-#################################################
-#
-# Pong
-# By Rory McGurty
-#
-# Use W, S and R, F to move.
-# First to five wins.
-# Font: http://www.dafont.com/04b-03.font
-#   0-25 A-Z
-#   26-51 a-z
-#   52-62 .!?-:#()*+
-#   63 whitespace
-#################################################
-
-:alias p1y v3
+﻿:alias p1y v3
 :alias p2y v4
 :alias ballx v5
 :alias bally v6
@@ -56,6 +42,24 @@
 	
 : ball
 	0x80
+	
+# #####################SOUND EFFECTS################################
+
+: ball-hit 1  0x02 0x21 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00
+
+: play-sound
+	load v0
+	vf := 1
+	i += vf
+	audio
+	buzzer := v0
+;
+
+:macro sfx SOUND {
+	i := SOUND
+	play-sound
+}
+#######################################################################
 
 : sync
 	v0 := 3
@@ -170,6 +174,8 @@
 	bally := v1	
 	
 	if vf == 1 begin
+		sfx ball-hit
+		i := ball
 		if ballx == p1x then ballvx := 1
 		if ballx == p2x then ballvx := -1
 	end
